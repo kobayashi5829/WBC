@@ -63,7 +63,7 @@ namespace Test
             _dictationRecognizer.DictationResult += async (text, confidence) =>
             {
                 Debug.Log("Player Said: " + text);
-                var response = await GetLLMResponseDummy(text); //プレイヤーが会話セッション内で発話
+                var response = await GetLLMResponse(text); //プレイヤーが会話セッション内で発話
                 Debug.Log("LLM Response: " + response);
                 var audioBytes = await GetTTSResponse(response);
                 Debug.Log("TTS Audio Bytes Length: " + audioBytes.Length);
@@ -100,10 +100,10 @@ namespace Test
 
             var payload = new
             {
-                model = "gpt-5-nano",
+                model = "gpt-4o-mini",
                 messages = new object[]
                 {
-                    new { role = "system", content = "あなたは徳島大学の学生です。短く会話をして下さい。" },
+                    new { role = "system", content = "あなたは徳島大学の学生です。50トークン程度で日常会話をして下さい。" },
                     new { role = "user", content = text }
                 }
             };
@@ -126,6 +126,7 @@ namespace Test
                 if (jsonResponseData != null && jsonResponseData.choices.Length > 0)
                 {
                     response = jsonResponseData.choices[0].message.content;
+                    Debug.Log(response);
                 }
                 else
                 {
@@ -191,7 +192,12 @@ namespace Test
             return clip;
         }
 
-        private async Task<string> GetLLMResponseDummy(string text)
+        /// <summary>
+        /// ローカルLLMからの回答を得る
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private async Task<string> GetLocalLLMResponse(string text)
         {
             string apiUrl = "http://127.0.0.1:8080/completion";
 
@@ -220,6 +226,11 @@ namespace Test
             }
 
             return response;
+        }
+
+        private async void GetRealtimeLLMResponse()
+        {
+            
         }
     }
 }
