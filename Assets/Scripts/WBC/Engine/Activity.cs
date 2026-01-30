@@ -8,16 +8,11 @@ namespace WBC.Engine
     {
         [Header("Components")]
         [SerializeField] private NavMeshAgent _navMeshAgent;
-        List<Vector3> _waypoints = new List<Vector3>(); // ウェイポイントリスト
+        [Header("Settings")]
+        [SerializeField] private float _waypointsRadius = 1f; // ウェイポイントの半径
+        [SerializeField] private float _npcDetectRadius = 1f; // NPC検出半径
+        public List<Vector3> waypoints = new List<Vector3>(); // ウェイポイントリスト
         private int _prevWaypointIndex = -1; // 前回のウェイポイントインデックス
-
-        void Start()
-        {
-            //モック
-            _waypoints.Add(new Vector3(-13.9224014f,1.00000048f,-6.20086002f));
-            _waypoints.Add(new Vector3(6.68404436f,0.999999404f,-3.28747082f));
-            _waypoints.Add(new Vector3(0f,1f,10f));
-        }
 
         /// <summary>
         /// 次のウェイポイントへ移動
@@ -27,20 +22,20 @@ namespace WBC.Engine
         {
             if (_navMeshAgent.isStopped)
             {
-                int waypointIndex = Random.Range(0, _waypoints.Count);
+                int waypointIndex = Random.Range(0, waypoints.Count);
                 if (waypointIndex == _prevWaypointIndex)
                 {
-                    waypointIndex = (waypointIndex + 1) % _waypoints.Count;
+                    waypointIndex = (waypointIndex + 1) % waypoints.Count;
                 }
                 _prevWaypointIndex = waypointIndex;
 
-                Vector3 targetPosition = _waypoints[waypointIndex];
+                Vector3 targetPosition = waypoints[waypointIndex];
                 _navMeshAgent.SetDestination(targetPosition);
                 _navMeshAgent.isStopped = false;
             }
             else
             {
-                if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + 0.1f)
+                if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + _waypointsRadius)
                 {
                     _navMeshAgent.isStopped = true;
                     return true;
@@ -48,6 +43,22 @@ namespace WBC.Engine
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// 近くのNPCを検出
+        /// </summary>
+        /// <returns></returns>
+        public Collider[] CheckNearNPC()
+        {
+            Collider[] hits = Physics.OverlapSphere(
+                transform.position,
+                _npcDetectRadius,
+                LayerMask.GetMask("NPC"),
+                QueryTriggerInteraction.Ignore
+            );
+
+            return hits;
         }
     }
 }
