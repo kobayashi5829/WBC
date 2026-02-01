@@ -154,6 +154,8 @@ MonoBehaviour:
   _conversation: {fileID: 0}
   _activity: {fileID: -2647574214075775834}
   _idleDuration: 1
+  _targetRadius: 5
+  _npcDetectRadius: 10
 --- !u!114 &-2647574214075775834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,5 +169,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WBC.Engine.Activity
   _navMeshAgent: {fileID: 1231738318996789953}
-  _waypointsRadius: 1
   waypoints: []

@@ -8,9 +8,6 @@ namespace WBC.Engine
     {
         [Header("Components")]
         [SerializeField] private NavMeshAgent _navMeshAgent;
-        [Header("Settings")]
-        [SerializeField] private float _waypointsRadius = 1f; // ウェイポイントの半径
-        [SerializeField] private float _npcDetectRadius = 1f; // NPC検出半径
         public List<Vector3> waypoints = new List<Vector3>(); // ウェイポイントリスト
         private int _prevWaypointIndex = -1; // 前回のウェイポイントインデックス
 
@@ -18,7 +15,7 @@ namespace WBC.Engine
         /// 次のウェイポイントへ移動
         /// </summary>
         /// <returns></returns>
-        public bool MoveToNextWaypoint()
+        public void MoveToNextWaypoint()
         {
             if (_navMeshAgent.isStopped)
             {
@@ -33,27 +30,42 @@ namespace WBC.Engine
                 _navMeshAgent.SetDestination(targetPosition);
                 _navMeshAgent.isStopped = false;
             }
-            else
-            {
-                if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + _waypointsRadius)
-                {
-                    _navMeshAgent.isStopped = true;
-                    return true;
-                }
-            }
+        }
 
-            return false;
+        /// <summary>
+        /// 近くのNPCへ移動
+        /// </summary>
+        /// <param name="target"></param>
+        public void MoveToNearNPC(GameObject target)
+        {
+            _navMeshAgent.SetDestination(target.transform.position);
+            _navMeshAgent.isStopped = false;
+        }
+
+        /// <summary>
+        /// 目的地到着判定
+        /// </summary>
+        /// <returns></returns>
+        public bool IsArrivedPoint(float radius)
+        {
+            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + radius)
+            {
+                _navMeshAgent.ResetPath();
+                _navMeshAgent.isStopped = true;
+                return true;
+            }
+            else { return false; }
         }
 
         /// <summary>
         /// 近くのNPCを検出
         /// </summary>
         /// <returns></returns>
-        public Collider[] CheckNearNPC()
+        public Collider[] CheckNearNPC(float radius)
         {
             Collider[] hits = Physics.OverlapSphere(
                 transform.position,
-                _npcDetectRadius,
+                radius,
                 LayerMask.GetMask("NPC"),
                 QueryTriggerInteraction.Ignore
             );
