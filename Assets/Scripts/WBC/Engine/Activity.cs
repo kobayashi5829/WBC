@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WBC.Engine
 {
@@ -8,7 +9,7 @@ namespace WBC.Engine
     {
         [Header("Components")]
         [SerializeField] private NavMeshAgent _navMeshAgent;
-        public List<Vector3> waypoints = new List<Vector3>(); // ウェイポイントリスト
+        [HideInInspector] public List<Vector3> waypoints = new List<Vector3>(); // ウェイポイントリスト
         private int _prevWaypointIndex = -1; // 前回のウェイポイントインデックス
 
         /// <summary>
@@ -17,19 +18,15 @@ namespace WBC.Engine
         /// <returns></returns>
         public void MoveToNextWaypoint()
         {
-            if (_navMeshAgent.isStopped)
+            int waypointIndex = Random.Range(0, waypoints.Count);
+            if (waypointIndex == _prevWaypointIndex)
             {
-                int waypointIndex = Random.Range(0, waypoints.Count);
-                if (waypointIndex == _prevWaypointIndex)
-                {
-                    waypointIndex = (waypointIndex + 1) % waypoints.Count;
-                }
-                _prevWaypointIndex = waypointIndex;
-
-                Vector3 targetPosition = waypoints[waypointIndex];
-                _navMeshAgent.SetDestination(targetPosition);
-                _navMeshAgent.isStopped = false;
+                waypointIndex = (waypointIndex + 1) % waypoints.Count;
             }
+            _prevWaypointIndex = waypointIndex;
+
+            Vector3 targetPosition = waypoints[waypointIndex];
+            _navMeshAgent.SetDestination(targetPosition);
         }
 
         /// <summary>
@@ -39,7 +36,6 @@ namespace WBC.Engine
         public void MoveToNearNPC(GameObject target)
         {
             _navMeshAgent.SetDestination(target.transform.position);
-            _navMeshAgent.isStopped = false;
         }
 
         /// <summary>
@@ -51,7 +47,6 @@ namespace WBC.Engine
             if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + radius)
             {
                 _navMeshAgent.ResetPath();
-                _navMeshAgent.isStopped = true;
                 return true;
             }
             else { return false; }
@@ -70,7 +65,9 @@ namespace WBC.Engine
                 QueryTriggerInteraction.Ignore
             );
 
-            return hits;
+            return hits
+                .Where(col => col.gameObject != this.gameObject)
+                .ToArray();
         }
     }
 }
