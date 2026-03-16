@@ -2,8 +2,7 @@ using UnityEngine;
 
 namespace WBC.Engine
 {
-    [RequireComponent(typeof(Activity))]
-    public class NormalController : MonoBehaviour
+    public class Controller : MonoBehaviour
     {
         private enum State
         {
@@ -35,12 +34,32 @@ namespace WBC.Engine
         [SerializeField] private float _provWalk = 0.1f; // 歩行状態への遷移確率割合
         [SerializeField] private float _provSearch = 0.1f; // 探索状態への遷移確率割合
         [Header("Debug")]
-        [SerializeField] private Renderer _debugCube;  
+        [SerializeField] private Renderer _debugCube;
+        [HideInInspector] public int id;// NPC識別ID
         public InteractionLock interactionLock = new InteractionLock();
         private State _state = State.Idle; // 現在の状態
         private float _timerCounter = 0f; // 時間計測用カウンター
+        private Action[] _actions; // アクションコンポーネントの配列
+        private int _actionIndex = 0; // 現在のアクションインデックス
 
-        void Update() { Control(_state); }
+        private void Start()
+        {
+            _actions = GetComponents<Action>();
+            _actionIndex = Random.Range(0, _actions.Length);
+        }
+
+        private void Update()
+        {
+            //行動を実行
+            if (_actions.Length != 0)
+            {
+                // 現在のアクションを実行し、完了したら次のアクションをランダムに選択
+                if (_actions[_actionIndex].Act() is true)
+                {
+                    _actionIndex = Random.Range(0, _actions.Length);
+                }
+            }
+        }
 
         /// <summary>
         /// 状態制御
@@ -50,7 +69,7 @@ namespace WBC.Engine
         {
             switch (state)
             {
-                case State.Idle: // 待機状態
+                /*case State.Idle: // 待機状態
                     _debugCube.material.color = Color.green;
                     if (Timer(_idleDuration))
                     {
@@ -85,7 +104,7 @@ namespace WBC.Engine
                     Debug.Log($"{_state} is Debug State.");
                     break;
                 default:
-                    break;
+                    break;*/
             }
         }
 
@@ -94,7 +113,7 @@ namespace WBC.Engine
         /// </summary>
         /// <param name="hits"></param>
         /// <returns></returns>
-        public NormalController GetInteractionTarget(Collider[] hits)
+        /*public NormalController GetInteractionTarget(Collider[] hits)
         {
             foreach (var hit in hits)
             {
@@ -104,7 +123,7 @@ namespace WBC.Engine
                 }
             }
             return null;
-        }
+        }*/
 
         /// <summary>
         /// 時間計測

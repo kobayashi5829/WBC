@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4701861217099637222}
   - component: {fileID: 5321227977760070759}
   - component: {fileID: 6102172881217911109}
-  - component: {fileID: 1166894055785063667}
+  - component: {fileID: 5491057745830750064}
   m_Layer: 0
-  m_Name: Normal Spawner
+  m_Name: Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,7 +114,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1166894055785063667
+--- !u!114 &5491057745830750064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,8 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7532137618128978242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a81bbffe19f57a5449cc7cc08758c522, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ff9ed4f2a2948f4bb01a4a047bbf56c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WBC.Spawner.NormalSpawner
-  _normalNPC: {fileID: 389419883375996605, guid: bb11193517907d54e912bc6f439e7f36, type: 3}
-  _spawnNum: 1
+  m_EditorClassIdentifier: Assembly-CSharp::WBC.Management.Spawner
+  _spawnNum: 5

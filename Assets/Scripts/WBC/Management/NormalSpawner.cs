@@ -1,12 +1,13 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 using WBC.Engine;
 
-namespace WBC.Spawner
+namespace WBC.Management
 {
     public class NormalSpawner : MonoBehaviour
     {
         [SerializeField] private GameObject _normalNPC; // ノーマルNPCプレハブ
+        [SerializeField] private GameObject _npcCloud; // NPC管理オブジェクト
         [Header("Settings")]
         [SerializeField] private int _spawnNum = 1; // スポーン数
         [SerializeField] private List<GameObject> _markerList; // マーカーリスト
