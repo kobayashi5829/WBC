@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 5149365690455256572}
   - component: {fileID: 1231738318996789953}
   - component: {fileID: 3399778898726625269}
+  - component: {fileID: 1383930015148390484}
   m_Layer: 6
-  m_Name: Normal NPC
+  m_Name: NPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,6 +163,19 @@ MonoBehaviour:
   _provSearch: 0.1
   _debugCube: {fileID: 0}
   id: 0
+--- !u!114 &1383930015148390484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389419883375996605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae082b2218205349a0968406bbb79b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WBC.Engine.Walk
+  _insideUnitRadius: 10
 --- !u!1 &6308371386158543033
 GameObject:
   m_ObjectHideFlags: 0
